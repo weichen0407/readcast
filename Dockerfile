@@ -51,7 +51,7 @@ COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/pub
 # 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
 
 # 创建必要的目录
-RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts
+RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data
 
 WORKDIR /app/backend
 
