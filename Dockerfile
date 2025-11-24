@@ -53,11 +53,15 @@ COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/pub
 # 创建必要的目录
 RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data /tmp
 
+# 验证文件是否存在
+RUN ls -la /app/backend/ | head -10
+RUN test -f /app/backend/package.json && echo "✅ package.json found" || echo "❌ package.json NOT found"
+
 WORKDIR /app/backend
 
 # 暴露端口
 EXPOSE 3000
 
-# 启动命令
-CMD ["npm", "start"]
+# 启动命令 - 使用绝对路径确保正确
+CMD ["node", "dist/index.js"]
 
