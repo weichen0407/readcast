@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/backend
+WORKDIR /app
 
 # 复制 backend 文件
-COPY backend/package*.json ./
-RUN npm install
+COPY backend/package*.json ./backend/
+RUN cd backend && npm install
 
-COPY backend/ ./
-RUN npm run build
+COPY backend/ ./backend/
+RUN cd backend && npm run build
 
 # 阶段 2: 构建 Frontend
 FROM node:20-slim AS frontend-builder
