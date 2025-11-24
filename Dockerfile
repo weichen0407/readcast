@@ -47,8 +47,8 @@ COPY --from=backend-builder /app/backend/package*.json ./backend/
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/public
 
-# 复制必要的配置文件
-COPY backend/.env.example ./backend/.env.example 2>/dev/null || true
+# 复制必要的配置文件（如果存在）
+# 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
 
 WORKDIR /app/backend
 
