@@ -8,7 +8,8 @@ dotenv.config();
 const getDeepSeekApiKey = (): string => {
   const key = process.env.DEEPSEEK_API_KEY;
   if (!key) {
-    throw new Error('DEEPSEEK_API_KEY is not set in environment variables. Please set it in .env file.');
+    console.warn('⚠️ DEEPSEEK_API_KEY is not set. Some AI features may not work.');
+    return ''; // 返回空字符串而不是抛出错误，允许应用启动
   }
   return key;
 };
