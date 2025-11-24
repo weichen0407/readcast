@@ -15,9 +15,10 @@ WORKDIR /app
 # 复制 backend 文件
 COPY backend/package*.json ./backend/
 WORKDIR /app/backend
-RUN npm install
+RUN npm install --production=false
 
-COPY backend/ ./backend/
+# 复制剩余的 backend 文件
+COPY backend/ ./
 RUN npm run build
 WORKDIR /app
 
@@ -33,9 +34,10 @@ WORKDIR /app
 # 复制 frontend 文件
 COPY frontend/package*.json ./frontend/
 WORKDIR /app/frontend
-RUN npm install
+RUN npm install --production=false
 
-COPY frontend/ ./frontend/
+# 复制剩余的 frontend 文件
+COPY frontend/ ./
 RUN npm run build
 WORKDIR /app
 
