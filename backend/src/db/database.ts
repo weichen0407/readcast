@@ -15,7 +15,14 @@ const dbPath = process.env.DATABASE_PATH ||
 let db: Database.Database;
 
 export function initDatabase(): Database.Database {
-  db = new Database(dbPath);
+  try {
+    console.log(`📂 Database path: ${dbPath}`);
+    db = new Database(dbPath);
+    console.log('✅ Database connection established');
+  } catch (error) {
+    console.error('❌ Failed to connect to database:', error);
+    throw error;
+  }
   
   // Create tables
   db.exec(`

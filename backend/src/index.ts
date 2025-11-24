@@ -39,7 +39,14 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize database
-initDatabase();
+try {
+  console.log('🔧 Initializing database...');
+  initDatabase();
+  console.log('✅ Database initialized successfully');
+} catch (error) {
+  console.error('❌ Failed to initialize database:', error);
+  process.exit(1);
+}
 
 // API Routes
 app.use('/api/articles', articleRoutes);
@@ -97,7 +104,19 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+// Start server with error handling
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Health check: http://0.0.0.0:${PORT}/api/health`);
+});
+
+server.on('error', (error: NodeJS.ErrnoException) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use`);
+  } else {
+    console.error('❌ Server error:', error);
+  }
+  process.exit(1);
 });
 
