@@ -74,6 +74,13 @@ WORKDIR /app/backend
 # 暴露端口
 EXPOSE 3000
 
-# 启动命令 - 添加诊断信息
+# 启动命令 - 添加诊断信息并确保输出不被缓冲
 # 使用 shell form 以便更好地捕获错误和输出诊断信息
-CMD sh -c "echo '=== Container Starting ===' && echo 'Node version:' && node --version && echo 'Current directory:' && pwd && echo 'Listing /app/backend/dist/:' && ls -la /app/backend/dist/ && echo 'Starting application...' && node /app/backend/dist/index.js"
+# 设置 NODE_ENV 和确保输出不被缓冲
+CMD sh -c "echo '=== Container Starting ===' && \
+           echo 'Node version:' && node --version && \
+           echo 'Current directory:' && pwd && \
+           echo 'Listing /app/backend/dist/:' && ls -la /app/backend/dist/ && \
+           echo 'Checking if index.js exists:' && test -f /app/backend/dist/index.js && echo 'YES' || echo 'NO' && \
+           echo 'Starting application...' && \
+           NODE_ENV=production node /app/backend/dist/index.js"

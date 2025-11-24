@@ -15,11 +15,13 @@ import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
 import readcastRoutes from './routes/readcast.js';
 
-// 立即输出启动信息
-console.log('🚀 Starting ReadCast application...');
-console.log('📝 Node version:', process.version);
-console.log('📝 NODE_ENV:', process.env.NODE_ENV || 'not set');
-console.log('📝 PORT:', process.env.PORT || 'not set');
+// 立即输出启动信息 - 使用 process.stdout 确保输出
+process.stdout.write('🚀 Starting ReadCast application...\n');
+process.stdout.write(`📝 Node version: ${process.version}\n`);
+process.stdout.write(`📝 NODE_ENV: ${process.env.NODE_ENV || 'not set'}\n`);
+process.stdout.write(`📝 PORT: ${process.env.PORT || 'not set'}\n`);
+process.stdout.write(`📝 Process PID: ${process.pid}\n`);
+process.stdout.write(`📝 Process CWD: ${process.cwd()}\n`);
 
 dotenv.config();
 
