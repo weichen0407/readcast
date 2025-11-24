@@ -14,10 +14,12 @@ WORKDIR /app
 
 # 复制 backend 文件
 COPY backend/package*.json ./backend/
-RUN cd backend && npm install
+WORKDIR /app/backend
+RUN npm install
 
 COPY backend/ ./backend/
-RUN cd backend && npm run build
+RUN npm run build
+WORKDIR /app
 
 # 验证构建结果
 RUN ls -la /app/backend/dist/ && \
@@ -30,10 +32,12 @@ WORKDIR /app
 
 # 复制 frontend 文件
 COPY frontend/package*.json ./frontend/
-RUN cd frontend && npm install
+WORKDIR /app/frontend
+RUN npm install
 
 COPY frontend/ ./frontend/
-RUN cd frontend && npm run build
+RUN npm run build
+WORKDIR /app
 
 # 验证构建结果
 RUN test -d /app/frontend/.output/public && echo "✅ Frontend build successful" || (echo "❌ Frontend build failed" && exit 1)
