@@ -78,7 +78,7 @@ export async function generateAudioWithMinimax(
   retries: number = 3
 ): Promise<Buffer> {
   const apiKey = getMinimaxApiKey();
-  const voiceKey = `${language}-${voiceType}`;
+  const voiceKey = `${language}-${voiceType}` as keyof typeof VOICE_CONFIGS;
   const voiceConfig = VOICE_CONFIGS[voiceKey] || VOICE_CONFIGS['zh-male'];
 
   // 限制文本长度，避免请求过大

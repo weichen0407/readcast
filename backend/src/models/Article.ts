@@ -1,10 +1,12 @@
+export type ArticleType = 'sports' | 'politics' | 'technology' | 'business' | 'science' | 'entertainment' | 'general' | null;
+
 export interface Article {
   id?: number;
   title?: string;
   content: string;
   url?: string;
   source?: string;
-  type?: 'sports' | 'politics' | null;
+  type?: ArticleType;
   summary?: string;
   timeline?: string;
   createdAt?: string;

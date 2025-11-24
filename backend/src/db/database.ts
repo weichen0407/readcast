@@ -9,7 +9,7 @@ const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '../../db/read.
 
 let db: Database.Database;
 
-export function initDatabase() {
+export function initDatabase(): Database.Database {
   db = new Database(dbPath);
   
   // Create tables
@@ -290,7 +290,7 @@ function migrateDatabase(db: Database.Database) {
   }
 }
 
-export function getDatabase() {
+export function getDatabase(): Database.Database {
   if (!db) {
     initDatabase();
   }

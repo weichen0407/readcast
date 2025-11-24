@@ -55,7 +55,7 @@ Classify this article into one category.`,
   ];
 
   for (const validCategory of validCategories) {
-    if (category.includes(validCategory)) {
+    if (validCategory && category.includes(validCategory)) {
       return validCategory;
     }
   }

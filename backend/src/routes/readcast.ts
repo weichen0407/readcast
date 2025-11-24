@@ -292,7 +292,7 @@ router.post('/article/generate', authenticate, async (req: AuthRequest, res) => 
           exportFormat === 'pdf' ? filename : null // 只有PDF保存路径
         );
 
-        documentId = result.lastInsertRowid;
+        documentId = Number(result.lastInsertRowid);
         fileUrl = `/api/readcast/download/document/${filename}`;
         filePath = filename;
         console.log('Document saved to database, ID:', documentId);
@@ -522,7 +522,7 @@ router.post('/favorites/generate', authenticate, async (req: AuthRequest, res) =
         exportFormat === 'pdf' ? filename : null // 只有PDF保存路径
       );
 
-      documentId = result.lastInsertRowid;
+      documentId = Number(result.lastInsertRowid);
       fileUrl = `/api/readcast/download/document/${filename}`;
       console.log('Document saved to database, ID:', documentId);
     }
