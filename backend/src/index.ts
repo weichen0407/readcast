@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs/promises';
 import { initDatabase } from './db/database.js';
 import articleRoutes from './routes/article/index.js';
 import dictionaryRoutes from './routes/dictionary.js';
@@ -48,12 +49,41 @@ app.get('/api/health', (req, res) => {
 // Serve static files from frontend dist in production
 if (process.env.NODE_ENV === 'production') {
   const frontendDist = path.join(__dirname, '../../frontend/.output/public');
-  app.use(express.static(frontendDist));
+  const frontendIndex = path.join(frontendDist, 'index.html');
   
-  // Handle all other routes by serving index.html (for SPA routing)
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendDist, 'index.html'));
-  });
+  // Check if frontend build exists (async check)
+  fs.access(frontendDist)
+    .then(() => {
+      console.log('Frontend build found at:', frontendDist);
+      app.use(express.static(frontendDist));
+      
+      // Handle all other routes by serving index.html (for SPA routing)
+      app.get('*', (req, res) => {
+        // Skip API routes
+        if (req.path.startsWith('/api')) {
+          return res.status(404).json({ error: 'API endpoint not found' });
+        }
+        res.sendFile(frontendIndex, (err) => {
+          if (err) {
+            console.error('Error serving index.html:', err);
+            res.status(500).json({ error: 'Failed to serve frontend' });
+          }
+        });
+      });
+    })
+    .catch((error) => {
+      console.warn('Frontend build not found, serving API only:', error);
+      // If frontend build doesn't exist, only serve API
+      app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+          return res.status(503).json({ 
+            error: 'Frontend not available',
+            message: 'Frontend build is missing. Please ensure frontend is built before deployment.'
+          });
+        }
+        res.status(404).json({ error: 'API endpoint not found' });
+      });
+    });
 }
 
 app.listen(PORT, '0.0.0.0', () => {
