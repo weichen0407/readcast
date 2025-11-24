@@ -22,14 +22,14 @@ RUN npm run build
 # 阶段 2: 构建 Frontend
 FROM node:20-slim AS frontend-builder
 
-WORKDIR /app/frontend
+WORKDIR /app
 
 # 复制 frontend 文件
-COPY frontend/package*.json ./
-RUN npm install
+COPY frontend/package*.json ./frontend/
+RUN cd frontend && npm install
 
-COPY frontend/ ./
-RUN npm run build
+COPY frontend/ ./frontend/
+RUN cd frontend && npm run build
 
 # 阶段 3: 生产运行环境
 FROM node:20-slim
@@ -51,7 +51,7 @@ COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/pub
 # 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
 
 # 创建必要的目录
-RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data
+RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data /tmp
 
 WORKDIR /app/backend
 
