@@ -47,6 +47,12 @@ COPY --from=backend-builder /app/backend/package*.json ./backend/
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/public
 
+# 验证复制的文件
+RUN echo "=== Verifying copied files ===" && \
+    ls -la /app/backend/ && \
+    ls -la /app/backend/dist/ 2>/dev/null || echo "dist directory not found" && \
+    test -f /app/backend/dist/index.js && echo "✅ dist/index.js exists" || echo "❌ dist/index.js missing"
+
 # 复制必要的配置文件（如果存在）
 # 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
 
