@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   },
   // 配置 Nitro
   nitro: {
-    preset: 'node-server',
+    preset: "node-server",
     // 开发环境代理配置
     devProxy: {
       "/api": {
