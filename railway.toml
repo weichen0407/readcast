@@ -3,7 +3,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "npm start --prefix backend"
+# startCommand 由 Dockerfile CMD 定义，不需要在这里设置
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
