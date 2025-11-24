@@ -53,9 +53,15 @@ COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/pub
 # 创建必要的目录
 RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data /tmp
 
-# 验证文件是否存在
-RUN ls -la /app/backend/ | head -10
-RUN test -f /app/backend/package.json && echo "✅ package.json found" || echo "❌ package.json NOT found"
+# 验证文件是否存在（调试用）
+RUN echo "=== Checking /app structure ===" && \
+    ls -la /app/ && \
+    echo "=== Checking /app/backend structure ===" && \
+    ls -la /app/backend/ && \
+    echo "=== Checking if package.json exists ===" && \
+    test -f /app/backend/package.json && echo "✅ package.json found at /app/backend/package.json" || echo "❌ package.json NOT found" && \
+    echo "=== Checking if dist/index.js exists ===" && \
+    test -f /app/backend/dist/index.js && echo "✅ dist/index.js found" || echo "❌ dist/index.js NOT found"
 
 WORKDIR /app/backend
 
@@ -63,5 +69,6 @@ WORKDIR /app/backend
 EXPOSE 3000
 
 # 启动命令 - 使用绝对路径确保正确
+# 使用 exec form 确保正确的工作目录
 CMD ["node", "dist/index.js"]
 
