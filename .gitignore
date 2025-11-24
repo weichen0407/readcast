@@ -18,6 +18,8 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+railway.env
+.railway
 
 # Logs
 npm-debug.log*

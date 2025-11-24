@@ -5,7 +5,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '../../db/read.db');
+// 在 Railway 上使用 /tmp，本地使用项目目录
+const dbPath = process.env.DATABASE_PATH || 
+  (process.env.NODE_ENV === 'production' 
+    ? '/tmp/read.db' 
+    : path.join(__dirname, '../../db/read.db'));
 
 let db: Database.Database;
 
