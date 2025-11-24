@@ -66,8 +66,12 @@ app.get('/api/health', (req, res) => {
 
 // Serve static files from frontend dist in production
 if (process.env.NODE_ENV === 'production') {
+  // 在 Docker 中，__dirname 是 /app/backend/dist，所以需要向上两级到 /app
   const frontendDist = path.join(__dirname, '../../frontend/.output/public');
   const frontendIndex = path.join(frontendDist, 'index.html');
+  
+  console.log('🔍 Looking for frontend at:', frontendDist);
+  console.log('🔍 __dirname is:', __dirname);
   
   // Check if frontend build exists (async check)
   fs.access(frontendDist)

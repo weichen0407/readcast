@@ -19,6 +19,10 @@ RUN cd backend && npm install
 COPY backend/ ./backend/
 RUN cd backend && npm run build
 
+# 验证构建结果
+RUN ls -la /app/backend/dist/ && \
+    test -f /app/backend/dist/index.js && echo "✅ Backend build successful" || (echo "❌ Backend build failed" && exit 1)
+
 # 阶段 2: 构建 Frontend
 FROM node:20-slim AS frontend-builder
 
@@ -30,6 +34,9 @@ RUN cd frontend && npm install
 
 COPY frontend/ ./frontend/
 RUN cd frontend && npm run build
+
+# 验证构建结果
+RUN test -d /app/frontend/.output/public && echo "✅ Frontend build successful" || (echo "❌ Frontend build failed" && exit 1)
 
 # 阶段 3: 生产运行环境
 FROM node:20-slim
@@ -47,34 +54,25 @@ COPY --from=backend-builder /app/backend/package*.json ./backend/
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/public
 
-# 验证复制的文件
-RUN echo "=== Verifying copied files ===" && \
-    ls -la /app/backend/ && \
-    ls -la /app/backend/dist/ 2>/dev/null || echo "dist directory not found" && \
-    test -f /app/backend/dist/index.js && echo "✅ dist/index.js exists" || echo "❌ dist/index.js missing"
-
-# 复制必要的配置文件（如果存在）
-# 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
-
 # 创建必要的目录
-RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts ./backend/data /tmp
+RUN mkdir -p /app/backend/storage/documents /app/backend/storage/podcasts /app/backend/data /tmp
 
-# 验证文件是否存在（调试用）
-RUN echo "=== Checking /app structure ===" && \
-    ls -la /app/ && \
-    echo "=== Checking /app/backend structure ===" && \
+# 最终验证所有文件
+RUN echo "=== Final file verification ===" && \
+    echo "Backend files:" && \
     ls -la /app/backend/ && \
-    echo "=== Checking if package.json exists ===" && \
-    test -f /app/backend/package.json && echo "✅ package.json found at /app/backend/package.json" || echo "❌ package.json NOT found" && \
-    echo "=== Checking if dist/index.js exists ===" && \
-    test -f /app/backend/dist/index.js && echo "✅ dist/index.js found" || echo "❌ dist/index.js NOT found"
+    echo "Backend dist:" && \
+    ls -la /app/backend/dist/ 2>/dev/null || echo "dist not found" && \
+    echo "Frontend files:" && \
+    ls -la /app/frontend/.output/public/ 2>/dev/null | head -5 || echo "frontend not found" && \
+    test -f /app/backend/dist/index.js && echo "✅ dist/index.js exists" || (echo "❌ dist/index.js missing" && exit 1) && \
+    test -f /app/backend/package.json && echo "✅ package.json exists" || (echo "❌ package.json missing" && exit 1)
 
+# 设置工作目录
 WORKDIR /app/backend
 
 # 暴露端口
 EXPOSE 3000
 
-# 启动命令 - 使用绝对路径确保正确
-# 使用 exec form 确保正确的工作目录
-CMD ["node", "dist/index.js"]
-
+# 启动命令 - 使用绝对路径
+CMD ["node", "/app/backend/dist/index.js"]
