@@ -50,6 +50,9 @@ COPY --from=frontend-builder /app/frontend/.output/public ./frontend/.output/pub
 # 复制必要的配置文件（如果存在）
 # 注意：环境变量应该通过 Railway 的 Variables 设置，不需要复制 .env 文件
 
+# 创建必要的目录
+RUN mkdir -p ./backend/storage/documents ./backend/storage/podcasts
+
 WORKDIR /app/backend
 
 # 暴露端口
