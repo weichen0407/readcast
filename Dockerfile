@@ -74,6 +74,6 @@ WORKDIR /app/backend
 # 暴露端口
 EXPOSE 3000
 
-# 启动命令 - 使用绝对路径，并添加错误处理
-# 使用 shell form 以便更好地捕获错误
-CMD node /app/backend/dist/index.js
+# 启动命令 - 添加诊断信息
+# 使用 shell form 以便更好地捕获错误和输出诊断信息
+CMD sh -c "echo '=== Container Starting ===' && echo 'Node version:' && node --version && echo 'Current directory:' && pwd && echo 'Listing /app/backend/dist/:' && ls -la /app/backend/dist/ && echo 'Starting application...' && node /app/backend/dist/index.js"
