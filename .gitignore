@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+dist/
+build/
+.next/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Storage (generated files)
+backend/storage/
+!backend/storage/.gitkeep
+
+# Fonts (large files, optional - can be downloaded)
+backend/fonts/*.otf
+backend/fonts/*.ttf
+!backend/fonts/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+

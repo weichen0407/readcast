@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "ffmpeg"]
+
+[phases.install]
+cmds = [
+  "npm run install:all"
+]
+
+[phases.build]
+cmds = [
+  "npm run build:backend",
+  "npm run build:frontend"
+]
+
+[start]
+cmd = "cd backend && npm start"
+
