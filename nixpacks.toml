@@ -3,8 +3,8 @@ nixPkgs = ["nodejs_20", "ffmpeg", "python3", "make", "gcc"]
 
 [phases.install]
 cmds = [
-  "cd backend && rm -rf node_modules package-lock.json && npm install",
-  "cd ../frontend && rm -rf node_modules package-lock.json && npm install"
+  "cd backend && rm -rf node_modules package-lock.json 2>/dev/null || true && npm install --no-optional || npm install",
+  "cd ../frontend && rm -rf node_modules package-lock.json 2>/dev/null || true && npm install --no-optional || npm install"
 ]
 
 [phases.build]
