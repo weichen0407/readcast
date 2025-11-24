@@ -3,13 +3,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: "2024-11-01",
   css: ["~/assets/css/main.css"],
-  // 配置为静态生成模式（用于后端服务静态文件）
-  nitro: {
-    preset: 'node-server',
-    // 在生产环境中，静态文件会输出到 .output/public
-  },
-  // 或者使用 generate 模式生成完全静态的站点
-  // ssr: false, // 如果只需要 SPA 模式
   app: {
     head: {
       title: "ReadCast - 智能英语学习平台",
@@ -28,8 +21,10 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE || "/api",
     },
   },
-  // 配置 Nitro 代理，将 /api 请求转发到后端服务器
+  // 配置 Nitro
   nitro: {
+    preset: 'node-server',
+    // 开发环境代理配置
     devProxy: {
       "/api": {
         target: "http://localhost:3001/api",
