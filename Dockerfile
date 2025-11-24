@@ -38,11 +38,16 @@ RUN npm install --production=false
 
 # 复制剩余的 frontend 文件
 COPY frontend/ ./
-RUN npm run build
+# 使用 generate 生成静态文件而不是 build（SSR）
+RUN npm run generate
 WORKDIR /app
 
 # 验证构建结果
-RUN test -d /app/frontend/.output/public && echo "✅ Frontend build successful" || (echo "❌ Frontend build failed" && exit 1)
+RUN echo "=== Frontend build verification ===" && \
+    ls -la /app/frontend/.output/ && \
+    ls -la /app/frontend/.output/public/ 2>/dev/null || echo "public directory not found" && \
+    test -d /app/frontend/.output/public && echo "✅ Frontend build successful" || (echo "❌ Frontend build failed" && exit 1) && \
+    test -f /app/frontend/.output/public/index.html && echo "✅ index.html exists" || (echo "❌ index.html missing" && exit 1)
 
 # 阶段 3: 生产运行环境
 FROM node:20-slim

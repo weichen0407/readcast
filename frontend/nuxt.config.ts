@@ -23,7 +23,8 @@ export default defineNuxtConfig({
   },
   // 配置 Nitro
   nitro: {
-    preset: "node-server",
+    // 生产环境使用静态生成，开发环境使用 node-server
+    preset: process.env.NODE_ENV === 'production' ? 'static' : 'node-server',
     // 开发环境代理配置
     devProxy: {
       "/api": {
