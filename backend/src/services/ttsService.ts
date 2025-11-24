@@ -78,6 +78,9 @@ export async function generateAudioWithMinimax(
   retries: number = 3
 ): Promise<Buffer> {
   const apiKey = getMinimaxApiKey();
+  if (!apiKey) {
+    throw new Error('MINIMAX_API_KEY is not set. Cannot generate audio.');
+  }
   const voiceKey = `${language}-${voiceType}` as keyof typeof VOICE_CONFIGS;
   const voiceConfig = VOICE_CONFIGS[voiceKey] || VOICE_CONFIGS['zh-male'];
 
