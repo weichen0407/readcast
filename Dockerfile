@@ -74,5 +74,6 @@ WORKDIR /app/backend
 # 暴露端口
 EXPOSE 3000
 
-# 启动命令 - 使用绝对路径
-CMD ["node", "/app/backend/dist/index.js"]
+# 启动命令 - 使用绝对路径，并添加错误处理
+# 使用 shell form 以便更好地捕获错误
+CMD node /app/backend/dist/index.js

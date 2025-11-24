@@ -1,0 +1,16 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.local
+*.md
+.DS_Store
+dist
+.output
+storage
+data
+*.db
+*.sqlite
+*.sqlite3
+

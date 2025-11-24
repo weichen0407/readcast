@@ -15,13 +15,25 @@ import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
 import readcastRoutes from './routes/readcast.js';
 
+// 立即输出启动信息
+console.log('🚀 Starting ReadCast application...');
+console.log('📝 Node version:', process.version);
+console.log('📝 NODE_ENV:', process.env.NODE_ENV || 'not set');
+console.log('📝 PORT:', process.env.PORT || 'not set');
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log('📂 __dirname:', __dirname);
+console.log('📂 __filename:', __filename);
+
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+console.log('✅ Express app created');
+console.log('✅ PORT set to:', PORT);
 
 // 添加启动错误处理
 process.on('uncaughtException', (error) => {
